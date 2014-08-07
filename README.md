@@ -1,4 +1,4 @@
-CodeKatasTDD
-============
+Code Katas & TDD
+================
 
-Small exercise in programming and practises of TDD.
+A couple of small exercises in programming and TDD practices.
