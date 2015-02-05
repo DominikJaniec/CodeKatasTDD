@@ -7,8 +7,8 @@
     <ProjectGuid>{6D77B5EB-1EBB-44DC-B64E-2DC6D2AAA9E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StringCalculator</RootNamespace>
-    <AssemblyName>StringCalculator</AssemblyName>
+    <RootNamespace>KataStringCalculator</RootNamespace>
+    <AssemblyName>KataStringCalculator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
