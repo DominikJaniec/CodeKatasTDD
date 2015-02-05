@@ -16,7 +16,15 @@ namespace KataStringCalculator
             }
             else
             {
-                return ParseNumber(numbers);
+                int sum = 0;
+
+                string[] numbersArray = numbers.Split(',');
+                foreach (string number in numbersArray)
+                {
+                    sum += ParseNumber(number);
+                }
+
+                return sum;
             }
         }
 
