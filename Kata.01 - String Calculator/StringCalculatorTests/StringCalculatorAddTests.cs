@@ -95,7 +95,7 @@ namespace StringCalculatorTests
         }
 
         [TestMethod]
-        public void NegativesNotAllowedContainsInvalidNumber()
+        public void ThrowedNegativesNotAllowed_ContainsInvalidNumber()
         {
             try
             {
@@ -105,6 +105,20 @@ namespace StringCalculatorTests
             catch (NegativesNotAllowed exception)
             {
                 Assert.AreEqual("Encountered negative numbers: -4", exception.Message);
+            }
+        }
+
+        [TestMethod]
+        public void ThrowedNegativesNotAllowed_ContainsAllInvalidNumbers()
+        {
+            try
+            {
+                var ignored = Calculator.Add("7,3,-64,98,3,-1");
+                Assert.Fail("Should throw NegativesNotAllowed!");
+            }
+            catch (NegativesNotAllowed exception)
+            {
+                Assert.AreEqual("Encountered negative numbers: -64, -1", exception.Message);
             }
         }
     }
