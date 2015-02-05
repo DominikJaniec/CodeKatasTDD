@@ -24,5 +24,14 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(1, result);
         }
+
+        [TestMethod]
+        public void ForTwo_ReturnTwo()
+        {
+            StringCalculator calculator = new StringCalculator();
+            int result = calculator.Add("2");
+
+            Assert.AreEqual(2, result);
+        }
     }
 }
