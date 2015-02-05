@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Text;
 
 namespace KataStringCalculator
 {
     public class NegativesNotAllowed : ApplicationException
     {
-        public NegativesNotAllowed(int value)
-            : base(BuildMessage(value))
+        public NegativesNotAllowed(IEnumerable<int> numbers)
+            : base(BuildMessage(numbers))
         {
         }
 
-        private static string BuildMessage(int value)
+        private static string BuildMessage(IEnumerable<int> numbers)
         {
-            return "Encountered negative numbers: " + value;
+            return "Encountered negative numbers: " + String.Join(", ", numbers);
         }
     }
 }

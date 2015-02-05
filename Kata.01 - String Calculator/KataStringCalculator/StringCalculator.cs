@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KataStringCalculator
 {
@@ -11,26 +13,12 @@ namespace KataStringCalculator
 
         public int Add(string numbers)
         {
-            int sum = 0;
-            foreach (string number in SplitNumbers(numbers))
-            {
-                sum += ParseNumber(number);
-            }
+            IEnumerable<int> allNumbers = SplitNumbers(numbers)
+                .Select(numStr => ParseNumber(numStr));
 
-            return sum;
-        }
+            CheckNegativeNumbers(allNumbers);
 
-        private int ParseNumber(string number)
-        {
-            int parsedValue = 0;
-            Int32.TryParse(number, out parsedValue);
-
-            if (parsedValue < 0)
-            {
-                throw new NegativesNotAllowed(parsedValue);
-            }
-
-            return parsedValue;
+            return allNumbers.Sum();
         }
 
         private string[] SplitNumbers(string numbers)
@@ -48,13 +36,32 @@ namespace KataStringCalculator
 
             string delimiter = data.Substring(substringIndexBegin, delimiterLength);
             string numbers = data.Substring(substringIndexEnd + 1);
-            
+
             return numbers.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private bool IsDelimiterDefined(string data)
         {
             return data.StartsWith(DelimiterDeclarationBegin);
+        }
+
+        private int ParseNumber(string number)
+        {
+            int parsedValue = 0;
+            Int32.TryParse(number, out parsedValue);
+
+            return parsedValue;
+        }
+
+        private void CheckNegativeNumbers(IEnumerable<int> numbers)
+        {
+            IEnumerable<int> allNegativeNumbers = numbers
+                .Where(n => n < 0);
+
+            if (allNegativeNumbers.Any())
+            {
+                throw new NegativesNotAllowed(allNegativeNumbers);
+            }
         }
     }
 }
