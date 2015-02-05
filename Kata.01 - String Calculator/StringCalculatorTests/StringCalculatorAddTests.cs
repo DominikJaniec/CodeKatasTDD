@@ -62,5 +62,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(109, result);
         }
+
+        [TestMethod]
+        public void NewLineAsDelimiter_ForOneTwoThree_ReturnSix()
+        {
+            int result = Calculator.Add("1\n2,3");
+
+            Assert.AreEqual(6, result);
+        }
     }
 }
