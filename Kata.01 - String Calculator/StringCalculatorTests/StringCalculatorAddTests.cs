@@ -46,5 +46,21 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(3, result);
         }
+
+        [TestMethod]
+        public void ForOneToNine_ReturnFourtyFive()
+        {
+            int result = Calculator.Add("1,2,3,4,5,6,7,8,9");
+
+            Assert.AreEqual(45, result);
+        }
+
+        [TestMethod]
+        public void ForEightyNineFiveFifteen_ReturnOneHundredNine()
+        {
+            int result = Calculator.Add("89,5,15");
+
+            Assert.AreEqual(109, result);
+        }
     }
 }
