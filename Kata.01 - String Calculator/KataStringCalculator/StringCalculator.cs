@@ -10,7 +10,14 @@ namespace KataStringCalculator
     {
         public int Add(string numbers)
         {
-            return 0;
+            if (String.Empty == numbers)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }
