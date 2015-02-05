@@ -70,5 +70,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(6, result);
         }
+
+        [TestMethod]
+        public void NewLineAsDelimiter_ForEightyNineFiveFifteen_ReturnOneHundredNine()
+        {
+            int result = Calculator.Add("89,5\n15");
+
+            Assert.AreEqual(109, result);
+        }
     }
 }
