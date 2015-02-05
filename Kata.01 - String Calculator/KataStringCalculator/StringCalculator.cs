@@ -27,7 +27,7 @@ namespace KataStringCalculator
 
             if (parsedValue < 0)
             {
-                throw new NegativesNotAllowed();
+                throw new NegativesNotAllowed(parsedValue);
             }
 
             return parsedValue;
