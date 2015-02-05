@@ -6,10 +6,12 @@ namespace KataStringCalculator
     {
         private readonly char[] Splitters = new[] { ',', '\n' };
 
+        private const string DelimiterDeclarationBegin = "//";
+        private const string DelimiterDeclarationEnd = "\n";
+
         public int Add(string numbers)
         {
             int sum = 0;
-
             foreach (string number in SplitNumbers(numbers))
             {
                 sum += ParseNumber(number);
@@ -25,7 +27,26 @@ namespace KataStringCalculator
 
         private string[] SplitNumbers(string numbers)
         {
-            return numbers.Split(Splitters, StringSplitOptions.RemoveEmptyEntries);
+            return IsDelimiterDefined(numbers)
+                ? SplitNumbersByDefinedDelimiter(numbers)
+                : numbers.Split(Splitters, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private string[] SplitNumbersByDefinedDelimiter(string data)
+        {
+            int substringIndexBegin = DelimiterDeclarationBegin.Length;
+            int substringIndexEnd = data.IndexOf(DelimiterDeclarationEnd);
+            int delimiterLength = substringIndexEnd - substringIndexBegin;
+
+            string delimiter = data.Substring(substringIndexBegin, delimiterLength);
+            string numbers = data.Substring(substringIndexEnd + 1);
+            
+            return numbers.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private bool IsDelimiterDefined(string data)
+        {
+            return data.StartsWith(DelimiterDeclarationBegin);
         }
     }
 }
