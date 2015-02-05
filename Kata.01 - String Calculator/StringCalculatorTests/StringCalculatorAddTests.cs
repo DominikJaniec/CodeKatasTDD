@@ -86,5 +86,12 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(6, result);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(NegativesNotAllowed))]
+        public void ThrowNegativesNotAllowed_ForMinusOne()
+        {
+            Calculator.Add("-1");
+        }
     }
 }
