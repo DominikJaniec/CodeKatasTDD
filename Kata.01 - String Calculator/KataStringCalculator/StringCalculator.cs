@@ -4,7 +4,7 @@ namespace KataStringCalculator
 {
     public class StringCalculator
     {
-        private readonly char[] Splitters = new[] { ',' };
+        private readonly char[] Splitters = new[] { ',', '\n' };
 
         public int Add(string numbers)
         {
