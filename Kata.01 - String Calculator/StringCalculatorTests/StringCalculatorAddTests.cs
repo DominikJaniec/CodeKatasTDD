@@ -93,5 +93,19 @@ namespace StringCalculatorTests
         {
             Calculator.Add("-1");
         }
+
+        [TestMethod]
+        public void NegativesNotAllowedContainsInvalidNumber()
+        {
+            try
+            {
+                var ignored = Calculator.Add("6,-4,3");
+                Assert.Fail("Should throw NegativesNotAllowed!");
+            }
+            catch (NegativesNotAllowed exception)
+            {
+                Assert.AreEqual("Encountered negative numbers: -4", exception.Message);
+            }
+        }
     }
 }
