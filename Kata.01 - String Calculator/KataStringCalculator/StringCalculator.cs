@@ -22,7 +22,15 @@ namespace KataStringCalculator
 
         private int ParseNumber(string number)
         {
-            return Int32.Parse(number);
+            int parsedValue = 0;
+            Int32.TryParse(number, out parsedValue);
+
+            if (parsedValue < 0)
+            {
+                throw new NegativesNotAllowed();
+            }
+
+            return parsedValue;
         }
 
         private string[] SplitNumbers(string numbers)
