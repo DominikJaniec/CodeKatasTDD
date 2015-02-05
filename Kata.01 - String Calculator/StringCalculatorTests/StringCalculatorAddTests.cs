@@ -15,5 +15,14 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(0, result);
         }
+
+        [TestMethod]
+        public void ForOne_ReturnOne()
+        {
+            StringCalculator calculator = new StringCalculator();
+            int result = calculator.Add("1");
+
+            Assert.AreEqual(1, result);
+        }
     }
 }
