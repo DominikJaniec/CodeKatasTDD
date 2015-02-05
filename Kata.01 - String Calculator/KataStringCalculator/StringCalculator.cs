@@ -8,5 +8,9 @@ namespace KataStringCalculator
 {
     public class StringCalculator
     {
+        public int Add(string p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
