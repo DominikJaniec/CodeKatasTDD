@@ -16,8 +16,13 @@ namespace KataStringCalculator
             }
             else
             {
-                return 1;
+                return ParseNumber(numbers);
             }
+        }
+
+        private int ParseNumber(string number)
+        {
+            return Int32.Parse(number);
         }
     }
 }
