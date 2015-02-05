@@ -78,5 +78,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(109, result);
         }
+
+        [TestMethod]
+        public void DefinitionOfDelimiter_ForOneTwoThree_ReturnSix()
+        {
+            int result = Calculator.Add("//;\n1;2;3");
+
+            Assert.AreEqual(6, result);
+        }
     }
 }
