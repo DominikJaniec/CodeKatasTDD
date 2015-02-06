@@ -121,5 +121,13 @@ namespace StringCalculatorTests
                 Assert.AreEqual("Encountered negative numbers: -64, -1", exception.Message);
             }
         }
+
+        [TestMethod]
+        public void IgnoringNumbersBiggerThanOneThousand_ForTwoAndThousandOne_ReturnTwo()
+        {
+            int result = Calculator.Add("2,1001");
+
+            Assert.AreEqual(2, result);
+        }
     }
 }
