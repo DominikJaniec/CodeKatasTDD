@@ -129,5 +129,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(2, result);
         }
+
+        [TestMethod]
+        public void IgnoringNumbersBiggerThanOneThousand_ForThreeAndThousandAndFortyTwo()
+        {
+            int result = Calculator.Add("3,1000,42");
+
+            Assert.AreEqual(45, result);
+        }
     }
 }
