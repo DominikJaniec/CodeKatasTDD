@@ -18,7 +18,9 @@ namespace KataStringCalculator
 
             CheckNegativeNumbers(allNumbers);
 
-            return allNumbers.Sum();
+            return allNumbers
+                .Where(IsValidNumber)
+                .Sum();
         }
 
         private string[] SplitNumbers(string numbers)
@@ -62,6 +64,11 @@ namespace KataStringCalculator
             {
                 throw new NegativesNotAllowed(allNegativeNumbers);
             }
+        }
+
+        private bool IsValidNumber(int number)
+        {
+            return number < 1000;
         }
     }
 }
