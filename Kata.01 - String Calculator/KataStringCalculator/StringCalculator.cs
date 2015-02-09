@@ -6,15 +6,15 @@ namespace KataStringCalculator
 {
     public class StringCalculator
     {
-        private readonly char[] Splitters = new[] { ',', '\n' };
-
         private const string DelimiterDeclarationBegin = "//";
         private const string DelimiterDeclarationEnd = "\n";
-
         private const string LongDelimiterDefinitionBegin = "[";
         private const string LongDelimiterDefinitionEnd = "]";
+
         private const string MultipleDelimiterSplitTag
             = LongDelimiterDefinitionEnd + LongDelimiterDefinitionBegin;
+
+        private readonly char[] Splitters = new[] { ',', '\n' };
 
         public int Add(string numbers)
         {
@@ -28,39 +28,6 @@ namespace KataStringCalculator
                 .Sum();
         }
 
-        private string[] SplitNumbers(string numbers)
-        {
-            return IsDelimiterDefined(numbers)
-                ? SplitNumbersByDefinedDelimiter(numbers)
-                : numbers.Split(Splitters, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        private string[] SplitNumbersByDefinedDelimiter(string data)
-        {
-            int substringIndexBegin = DelimiterDeclarationBegin.Length;
-            int substringIndexEnd = data.IndexOf(DelimiterDeclarationEnd);
-            int delimiterDefinitionLength = substringIndexEnd - substringIndexBegin;
-
-            string delimiterDefinition = data.Substring(substringIndexBegin, delimiterDefinitionLength);
-            string[] delimiters = ExtractDelimiter(delimiterDefinition);
-            string numbers = data.Substring(substringIndexEnd + 1);
-
-            return numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        private bool IsDelimiterDefined(string data)
-        {
-            return data.StartsWith(DelimiterDeclarationBegin);
-        }
-
-        private int ParseNumber(string number)
-        {
-            int parsedValue = 0;
-            Int32.TryParse(number, out parsedValue);
-
-            return parsedValue;
-        }
-
         private void CheckNegativeNumbers(IEnumerable<int> numbers)
         {
             IEnumerable<int> allNegativeNumbers = numbers
@@ -70,11 +37,6 @@ namespace KataStringCalculator
             {
                 throw new NegativesNotAllowed(allNegativeNumbers);
             }
-        }
-
-        private bool IsValidNumber(int number)
-        {
-            return number < 1000;
         }
 
         private string[] ExtractDelimiter(string delimiterDefinition)
@@ -99,10 +61,48 @@ namespace KataStringCalculator
             }
         }
 
+        private bool IsDelimiterDefined(string data)
+        {
+            return data.StartsWith(DelimiterDeclarationBegin);
+        }
+
         private bool IsValidLongDelimiterDefinition(string delimiterDefinition)
         {
             return delimiterDefinition.StartsWith(LongDelimiterDefinitionBegin)
                 && delimiterDefinition.EndsWith(LongDelimiterDefinitionEnd);
+        }
+
+        private bool IsValidNumber(int number)
+        {
+            return number < 1000;
+        }
+
+        private int ParseNumber(string number)
+        {
+            int parsedValue = 0;
+            Int32.TryParse(number, out parsedValue);
+
+            return parsedValue;
+        }
+
+        private string[] SplitNumbers(string numbers)
+        {
+            return IsDelimiterDefined(numbers)
+                ? SplitNumbersByDefinedDelimiter(numbers)
+                : numbers.Split(Splitters, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private string[] SplitNumbersByDefinedDelimiter(string data)
+        {
+            int substringIndexBegin = DelimiterDeclarationBegin.Length;
+            int substringIndexEnd = data.IndexOf(DelimiterDeclarationEnd);
+            int delimiterDefinitionLength = substringIndexEnd - substringIndexBegin;
+
+            string delimiterDefinition = data.Substring(substringIndexBegin, delimiterDefinitionLength);
+            string[] delimiters = ExtractDelimiter(delimiterDefinition);
+            string numbers = data.Substring(substringIndexEnd + 1);
+
+            return numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
