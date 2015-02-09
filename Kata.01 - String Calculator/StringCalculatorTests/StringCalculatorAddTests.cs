@@ -153,5 +153,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(6, result);
         }
+
+        [TestMethod]
+        public void DefinitionOfMultipleLongDelimiters_ForSixTwentyEightOne_ReturnThirtyFive()
+        {
+            int result = Calculator.Add("//[long][#$%]\n6long28#$%1");
+
+            Assert.AreEqual(35, result);
+        }
     }
 }
