@@ -11,6 +11,9 @@ namespace KataStringCalculator
         private const string DelimiterDeclarationBegin = "//";
         private const string DelimiterDeclarationEnd = "\n";
 
+        private const string LongDelimiterDefinitionBegin = "[";
+        private const string LongDelimiterDefinitionEnd = "]";
+
         public int Add(string numbers)
         {
             IEnumerable<int> allNumbers = SplitNumbers(numbers)
@@ -34,9 +37,11 @@ namespace KataStringCalculator
         {
             int substringIndexBegin = DelimiterDeclarationBegin.Length;
             int substringIndexEnd = data.IndexOf(DelimiterDeclarationEnd);
-            int delimiterLength = substringIndexEnd - substringIndexBegin;
+            int delimiterDefinitionLength = substringIndexEnd - substringIndexBegin;
 
-            string delimiter = data.Substring(substringIndexBegin, delimiterLength);
+            string delimiterDefinition = data.Substring(substringIndexBegin, delimiterDefinitionLength);
+
+            string delimiter = ExtractDelimiter(delimiterDefinition);
             string numbers = data.Substring(substringIndexEnd + 1);
 
             return numbers.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
@@ -69,6 +74,32 @@ namespace KataStringCalculator
         private bool IsValidNumber(int number)
         {
             return number < 1000;
+        }
+
+        private string ExtractDelimiter(string delimiterDefinition)
+        {
+            if (delimiterDefinition.Length == 1)
+            {
+                return delimiterDefinition;
+            }
+
+            if (IsValidLongDelimiterDefinition(delimiterDefinition))
+            {
+                int substringIndexBegin = LongDelimiterDefinitionBegin.Length;
+                int delimiterLength = delimiterDefinition.Length - substringIndexBegin - LongDelimiterDefinitionEnd.Length;
+
+                return delimiterDefinition.Substring(substringIndexBegin, delimiterLength);
+            }
+            else
+            {
+                throw new FormatException("Invalid definition of delimiter.");
+            }
+        }
+
+        private bool IsValidLongDelimiterDefinition(string delimiterDefinition)
+        {
+            return delimiterDefinition.StartsWith(LongDelimiterDefinitionBegin)
+                && delimiterDefinition.EndsWith(LongDelimiterDefinitionEnd);
         }
     }
 }
