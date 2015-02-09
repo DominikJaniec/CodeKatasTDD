@@ -137,5 +137,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(45, result);
         }
+
+        [TestMethod]
+        public void DefinitionOfLongDelimiter_ForOneTwoThree_ReturnSix()
+        {
+            int result = Calculator.Add("//[***]\n1***2***3");
+
+            Assert.AreEqual(6, result);
+        }
     }
 }
