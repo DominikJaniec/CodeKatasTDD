@@ -145,5 +145,13 @@ namespace StringCalculatorTests
 
             Assert.AreEqual(6, result);
         }
+
+        [TestMethod]
+        public void DefinitionOfMultipleDelimiters_ForOneTwoThree_ReturnSix()
+        {
+            int result = Calculator.Add("//[*][%]\n1*2%3");
+
+            Assert.AreEqual(6, result);
+        }
     }
 }
