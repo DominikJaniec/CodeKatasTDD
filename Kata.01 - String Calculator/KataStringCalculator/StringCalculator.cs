@@ -13,6 +13,8 @@ namespace KataStringCalculator
 
         private const string LongDelimiterDefinitionBegin = "[";
         private const string LongDelimiterDefinitionEnd = "]";
+        private const string MultipleDelimiterSplitTag
+            = LongDelimiterDefinitionEnd + LongDelimiterDefinitionBegin;
 
         public int Add(string numbers)
         {
@@ -40,11 +42,10 @@ namespace KataStringCalculator
             int delimiterDefinitionLength = substringIndexEnd - substringIndexBegin;
 
             string delimiterDefinition = data.Substring(substringIndexBegin, delimiterDefinitionLength);
-
-            string delimiter = ExtractDelimiter(delimiterDefinition);
+            string[] delimiters = ExtractDelimiter(delimiterDefinition);
             string numbers = data.Substring(substringIndexEnd + 1);
 
-            return numbers.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
+            return numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private bool IsDelimiterDefined(string data)
@@ -76,11 +77,11 @@ namespace KataStringCalculator
             return number < 1000;
         }
 
-        private string ExtractDelimiter(string delimiterDefinition)
+        private string[] ExtractDelimiter(string delimiterDefinition)
         {
             if (delimiterDefinition.Length == 1)
             {
-                return delimiterDefinition;
+                return new string[] { delimiterDefinition };
             }
 
             if (IsValidLongDelimiterDefinition(delimiterDefinition))
@@ -88,7 +89,9 @@ namespace KataStringCalculator
                 int substringIndexBegin = LongDelimiterDefinitionBegin.Length;
                 int delimiterLength = delimiterDefinition.Length - substringIndexBegin - LongDelimiterDefinitionEnd.Length;
 
-                return delimiterDefinition.Substring(substringIndexBegin, delimiterLength);
+                return delimiterDefinition
+                    .Substring(substringIndexBegin, delimiterLength)
+                    .Split(new string[] { MultipleDelimiterSplitTag }, StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
