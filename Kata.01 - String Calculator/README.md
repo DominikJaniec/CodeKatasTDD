@@ -38,7 +38,7 @@ As you may see, I made this TDD Kata (steps from *1* to *5*) in almost 2 hours. 
 A next day afterwards, I wanted to continue this Kata. Maybe it isn't right way under this Kata, but I was feeling it would be very easy to finish these last three steps. I didn't remember why, but I only did a single step (7) and it took me up to 15 minutes.
 
 * Work started on step [[2015-02-06 15:17:47 +0100: 5f53f6](https://github.com/DominikJaniec/CodeKatasTDD/commit/5f53f66440a056b5f40ad761c776829af4f958b4)]
-* Step finished [[2015-02-06 15:32:22 +0100: 5f53f6](https://github.com/DominikJaniec/CodeKatasTDD/commit/5f53f66440a056b5f40ad761c776829af4f958b4)]
+* Step finished [[2015-02-06 15:32:22 +0100: a1fc4f](https://github.com/DominikJaniec/CodeKatasTDD/commit/a1fc4fa2fa2e86d4435e391b53ad8803682be0d6)]
 
 In the end I finished work on these last two steps in about 50 minutes.
 
