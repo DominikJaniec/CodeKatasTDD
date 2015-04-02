@@ -26,3 +26,25 @@ The following is a TDD Kata - an exercise in coding, refactoring and test-first,
     * For example: `"//[***]\n1***2***3"` should return `6`.
 9. Allow multiple delimiters like this: `"//[delim1][delim2]\n"` for example `"//[*][%]\n1*2%3"` should return `6`.
     * Make sure you can also handle multiple delimiters with length longer than one char.
+
+----
+# My thoughts:
+
+As you may see, I made this TDD Kata (steps from *1* to *5*) in almost 2 hours. It was my first time, when I was playing with a truly approach of TDD.
+
+* A initial commit (2015-02-05 16:31:10 +0100): DominikJaniec/CodeKatasTDD@2ae69540cc07379bc394f04e7de61421dd1d6ab1
+* A green stage of 5th point (2015-02-05 18:18:52 +0100): DominikJaniec/CodeKatasTDD@69f7aeff9d3d58e07d112da636bf27bbbaa1cb55
+
+A next day afterwards, I wanted to continue this Kata. Maybe it isn't right way under this Kata, but I was feeling it would be very easy to finish these last three steps. I didn't remember why, but I only did a single step (7) and it took me up to 15 minutes.
+
+* Work started on step (2015-02-06 15:17:47 +0100): DominikJaniec/CodeKatasTDD@5f53f66440a056b5f40ad761c776829af4f958b4
+* Step finished (2015-02-06 15:32:22 +0100): DominikJaniec/CodeKatasTDD@5f53f66440a056b5f40ad761c776829af4f958b4
+
+In the end I finished work on these last two steps in about 50 minutes.
+
+* First monday commit (2015-02-09 14:42:30 +0100) : DominikJaniec/CodeKatasTDD@5a282958173bd89a16c3bfdf145d1f192ddacdff
+* Completing a kata (2015-02-09 15:32:50 +0100) : DominikJaniec/CodeKatasTDD@acc9fd5e6097db13470583a2ab19d1309eb5ec66
+
+Ok, it wasn't a short 15 minutes play. Maybe it's that, I was committing all steps. Maybe because I was making it a first time.
+
+But, I would like to make this Kata again. Probably I will use [nx]Unit, or something, but now I don't know. Also I will commit everything for create a history, like now.
