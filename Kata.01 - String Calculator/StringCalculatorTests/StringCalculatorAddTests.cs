@@ -22,5 +22,14 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: 1, actual: result);
         }
+
+        [Fact]
+        public void ShouldReturnThree_WhenOneTwoSequenceIsGiven()
+        {
+            var calculator = new StringCalculator();
+            int result = calculator.Add("1,2");
+
+            Assert.Equal(expected: 3, actual: result);
+        }
     }
 }
