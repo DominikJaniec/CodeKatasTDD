@@ -53,7 +53,7 @@ namespace StringCalculatorTests
             var calculator = new StringCalculator();
             int result = calculator.Add("1\n2,3");
 
-            Assert.Equal(expected: 5, actual: result);
+            Assert.Equal(expected: 6, actual: result);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace KataStringCalculator
                 .Select(Int32.Parse);
         }
 
-        private static readonly char[] Splitters = new[] { ',' };
+        private static readonly char[] Splitters = new[] { ',', '\n' };
 
         private static IEnumerable<string> GetNumbersAsStrings(string numbers)
         {
