@@ -4,7 +4,7 @@
     {
         public int Add(string numbers)
         {
-            throw new System.NotImplementedException();
+            return 0;
         }
     }
 }
