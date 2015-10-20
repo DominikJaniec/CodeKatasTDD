@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KataStringCalculator
 {
@@ -9,7 +11,14 @@ namespace KataStringCalculator
             if (string.IsNullOrEmpty(numbers))
                 return 0;
 
-            return Int32.Parse(numbers);
+            return GetNumbers(numbers).Sum();
+        }
+
+        private static IEnumerable<int> GetNumbers(string numbers)
+        {
+            return numbers
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(Int32.Parse);
         }
     }
 }
