@@ -1,12 +1,13 @@
-﻿using System;
-using KataStringCalculator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace StringCalculatorTests
 {
-    [TestClass]
     public class StringCalculatorAddTests
     {
-
+        [Fact]
+        public void FailingTest()
+        {
+            Assert.True(false);
+        }
     }
 }
