@@ -1,4 +1,5 @@
-﻿using KataStringCalculator;
+﻿using System;
+using KataStringCalculator;
 using Xunit;
 
 namespace StringCalculatorTests
@@ -54,6 +55,15 @@ namespace StringCalculatorTests
             int result = calculator.Add("1\n2,3");
 
             Assert.Equal(expected: 6, actual: result);
+        }
+
+        [Fact]
+        public void ShouldAllowDefiningDelimiter()
+        {
+            var calculator = new StringCalculator();
+            int result = calculator.Add("//;\n1;2");
+
+            Assert.Equal(expected: 3, actual: result);
         }
     }
 }
