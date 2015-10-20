@@ -13,5 +13,14 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: 0, actual: result);
         }
+
+        [Fact]
+        public void ShouldReturnOne_WhenStringOneIsGiven()
+        {
+            var calculator = new StringCalculator();
+            int result = calculator.Add("1");
+
+            Assert.Equal(expected: 1, actual: result);
+        }
     }
 }
