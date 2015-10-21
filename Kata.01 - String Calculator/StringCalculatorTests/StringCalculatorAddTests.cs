@@ -106,7 +106,7 @@ namespace StringCalculatorTests
             var calculator = new StringCalculator();
             int result = calculator.Add("//[***]\n1***2***3");
 
-            Assert.Equal(expected: 3, actual: result);
+            Assert.Equal(expected: 6, actual: result);
         }
     }
 }

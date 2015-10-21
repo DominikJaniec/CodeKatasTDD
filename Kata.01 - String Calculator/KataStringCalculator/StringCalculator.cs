@@ -44,46 +44,84 @@ namespace KataStringCalculator
 
         private static readonly string[] DefaultSplitters = { ",", "\n" };
 
-        private static readonly Regex CustomDelimiterDefinition
-            = new Regex(@"^//(?<CUSTOM_DELIMITER>.+?)\n(?<NUMBERS>\d.+)$", RegexOptions.Compiled);
-
         private static IEnumerable<string> GetNumbersAsStrings(string numbers)
         {
-            var numbersSequence = numbers;
+            var resultNumberSequence = numbers;
             var delimiterStringArray = DefaultSplitters;
 
             FindCustomDelimiters(
                 numbers,
                 ref delimiterStringArray,
-                ref numbersSequence);
+                ref resultNumberSequence);
 
-            return numbersSequence.Split(
+            return resultNumberSequence.Split(
                 delimiterStringArray,
                 StringSplitOptions.RemoveEmptyEntries);
         }
 
+        private const string CustomDelimiterDefinitionBeginning = "//";
+        private const string CustomDelimiterDefinitionEnds = "\n";
+
         private static void FindCustomDelimiters(
             string baseNumberSequence,
             ref string[] delimiter,
-            ref string numbers)
+            ref string resultNumberSequence)
         {
-            var customDefinitions = CustomDelimiterDefinition
+            if (!baseNumberSequence.StartsWith(CustomDelimiterDefinitionBeginning))
+                return;
+
+            if (!TryFindCustomComplexDelimiters(baseNumberSequence, ref delimiter, ref resultNumberSequence))
+                FindCustomSingleDelimiter(baseNumberSequence, out delimiter, out resultNumberSequence);
+        }
+
+        private static readonly Regex CustomLongDelimiterDefinition
+            = new Regex(@"^//\[(?<CUSTOM_DELIMITER>.+?)\]\n(?<NUMBERS>\d.+)$", RegexOptions.Compiled);
+
+        private static bool TryFindCustomComplexDelimiters(
+            string baseNumberSequence,
+            ref string[] delimiter,
+            ref string resultNumberSequence)
+        {
+            var customDefinitions = CustomLongDelimiterDefinition
                 .Match(baseNumberSequence);
 
-            if (customDefinitions.Success)
-            {
-                var customDelimiter = customDefinitions
-                    .Groups["CUSTOM_DELIMITER"]
-                    .Value;
+            if (!customDefinitions.Success)
+                return false;
 
-                delimiter = new[] { customDelimiter }
-                    .Concat(DefaultSplitters)
-                    .ToArray();
+            var customDelimiter = customDefinitions
+                .Groups["CUSTOM_DELIMITER"]
+                .Value;
 
-                numbers = customDefinitions
-                    .Groups["NUMBERS"]
-                    .Value;
-            }
+            delimiter = new[] { customDelimiter }
+                .Concat(DefaultSplitters)
+                .ToArray();
+
+            resultNumberSequence = customDefinitions
+                .Groups["NUMBERS"]
+                .Value;
+
+            return true;
+        }
+
+        private static void FindCustomSingleDelimiter(
+            string baseNumberSequence,
+            out string[] delimiter,
+            out string resultNumberSequence)
+        {
+            var legalSingleCharDelimiterIndex = CustomDelimiterDefinitionBeginning.Length;
+            var customSingleCharDelimiter = baseNumberSequence
+                .Substring(legalSingleCharDelimiterIndex, length: 1);
+
+            delimiter = new[] { customSingleCharDelimiter }
+                .Concat(DefaultSplitters)
+                .ToArray();
+
+            var resultSequenceStartIndex = 1
+                + CustomDelimiterDefinitionBeginning.Length
+                + CustomDelimiterDefinitionEnds.Length;
+
+            resultNumberSequence = baseNumberSequence
+                .Substring(resultSequenceStartIndex);
         }
     }
 }
