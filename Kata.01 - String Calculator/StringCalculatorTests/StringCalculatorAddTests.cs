@@ -35,7 +35,6 @@ namespace StringCalculatorTests
         [Theory]
         [InlineData("0,1,0", 1)]
         [InlineData("1,1,1,1,1", 5)]
-        [InlineData("1,-1,2,-3,5", 4)]
         [InlineData("9,8,7,6,5,4,3,2,1,0", 45)]
         [InlineData("0,1,2,3,4,5,6,7,8,9", 45)]
         [InlineData("123,456,789,741,852,963,159,753", 4836)]

@@ -9,7 +9,21 @@ namespace KataStringCalculator
     {
         public int Add(string numbers)
         {
-            return GetNumbers(numbers).Sum();
+            return AddIts(GetNumbers(numbers));
+        }
+
+        private static int AddIts(IEnumerable<int> numbers)
+        {
+            long currentSum = 0;
+            foreach (var currentNumber in numbers)
+            {
+                if (currentNumber < 0)
+                    throw new NegativesNotAllowedException();
+
+                currentSum += currentNumber;
+            }
+
+            return (int)currentSum;
         }
 
         private static IEnumerable<int> GetNumbers(string numbers)
