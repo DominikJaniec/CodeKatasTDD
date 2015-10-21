@@ -129,5 +129,29 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: 222, actual: result);
         }
+
+        [Fact]
+        public void ShouldAllowDefinesDelimeterWithNumbers()
+        {
+            // Cleared numbers sequence:  "45 26 84   57  13  1 5   8 4 36  54"
+            var numbers = "//[0][88][_1_]\n45026084_1_57881388105_1_8040368854";
+
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbers);
+
+            Assert.Equal(expected: 333, actual: result);
+        }
+
+        [Fact]
+        public void ShouldAllowDefinesDelimiterContainedDefaultDelimiters()
+        {
+            // Cleared numbers sequence:                                        "1  5  79 5            46 8             336 6            423         46 4            5             6 8             46"
+            var numbers = "//[delimeter][;][,][\n][more,complex][s\np\ne\nl\nl]\n1\n5\n79,5more,complex46,8s\np\ne\nl\nl336,6more,complex423delimeter46,4more,complex5s\np\ne\nl\nl6;8s\np\ne\nl\nl46";
+
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbers);
+
+            Assert.Equal(expected: 1024, actual: result);
+        }
     }
 }
