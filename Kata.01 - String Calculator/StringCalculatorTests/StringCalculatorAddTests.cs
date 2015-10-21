@@ -86,5 +86,19 @@ namespace StringCalculatorTests
                 Assert.Equal(expected: "Negative numbers are not allowed. Encountered values: -5; -7; -5; -2.", actual: exception.Message);
             }
         }
+
+        [Fact]
+
+        [InlineData("2,1001", 2)]
+        [InlineData("2,1000", 1002)]
+        [InlineData("1,1001,10001,1001,1", 2)]
+        [InlineData("1000,15,1000,15,1000", 3030)]
+        public void ShouldIgnoringNumbersBigerThanOneThousand(string numbersSequence, int expectedResult)
+        {
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbersSequence);
+
+            Assert.Equal(expected: expectedResult, actual: result);
+        }
     }
 }
