@@ -121,7 +121,9 @@ namespace KataStringCalculator
             }
 
             customDelimiters.AddRange(DefaultSplitters);
-            delimiters = customDelimiters.ToArray();
+            delimiters = customDelimiters
+                .OrderByDescending(deli => deli, ContainsStringComparer.Instance)
+                .ToArray();
 
             return true;
         }
@@ -145,6 +147,30 @@ namespace KataStringCalculator
 
             resultNumberSequence = baseNumberSequence
                 .Substring(resultSequenceStartIndex);
+        }
+
+        private class ContainsStringComparer : IComparer<string>
+        {
+            public static IComparer<string> Instance { get; private set; }
+
+            static ContainsStringComparer()
+            {
+                Instance = new ContainsStringComparer();
+            }
+
+            public int Compare(string x, string y)
+            {
+                if (string.Equals(x, y))
+                    return 0;
+
+                if (x.Contains(y))
+                    return 1;
+
+                if (y.Contains(x))
+                    return -1;
+
+                return 0;
+            }
         }
     }
 }
