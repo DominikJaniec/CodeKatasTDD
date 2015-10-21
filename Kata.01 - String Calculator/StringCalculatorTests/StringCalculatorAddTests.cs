@@ -1,5 +1,4 @@
-﻿using System;
-using KataStringCalculator;
+﻿using KataStringCalculator;
 using Xunit;
 
 namespace StringCalculatorTests
@@ -64,6 +63,15 @@ namespace StringCalculatorTests
             int result = calculator.Add("//;\n1;2");
 
             Assert.Equal(expected: 3, actual: result);
+        }
+
+        [Fact]
+        public void ShouldThrowNegativesNotAllowedException_WhenNegativeNumberOccur()
+        {
+            var calculator = new StringCalculator();
+
+            Assert.Throws<NegativesNotAllowedException>(
+                () => calculator.Add("3,2,1,0,-1"));
         }
     }
 }
