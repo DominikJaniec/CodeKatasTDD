@@ -15,13 +15,18 @@ namespace KataStringCalculator
         private static int AddIts(IEnumerable<int> numbers)
         {
             long currentSum = 0;
+            var negatives = new List<int>();
+
             foreach (var currentNumber in numbers)
             {
                 if (currentNumber < 0)
-                    throw new NegativesNotAllowedException();
+                    negatives.Add(currentNumber);
 
                 currentSum += currentNumber;
             }
+
+            if (negatives.Any())
+                throw new NegativesNotAllowedException(negatives);
 
             return (int)currentSum;
         }

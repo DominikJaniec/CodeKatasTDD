@@ -76,11 +76,10 @@ namespace StringCalculatorTests
         [Fact]
         public void ShouldThrowMessageWithAllOccuredNegativesNumber()
         {
-            var calculator = new StringCalculator();
-
             try
             {
-                int ignored = calculator.Add("9,-5,1,-7,5,-5,3,-2,1");
+                var calculator = new StringCalculator();
+                calculator.Add("9,-5,1,-7,5,-5,3,-2,1");
             }
             catch (NegativesNotAllowedException exception)
             {
