@@ -117,5 +117,17 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: 6, actual: result);
         }
+
+        [Fact]
+        public void ShouldAllowDefineMultipleDelimitersOfAnyLength()
+        {
+            // Cleared numbers sequence:         "123 14  17     42 7 9     4   3   2   1"
+            var numbers = "//[kabum][X][__][___]\n123X14__17kabum42X7X9kabum4___3___2___1";
+
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbers);
+
+            Assert.Equal(expected: 222, actual: result);
+        }
     }
 }
