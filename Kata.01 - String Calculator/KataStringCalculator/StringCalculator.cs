@@ -61,15 +61,6 @@ namespace KataStringCalculator
         private const string CustomDelimitersDefinitionBeginning = "//";
         private const string CustomDelimitersDefinitionEnds = "\n";
 
-        private const string CustomDelimitersDefinitionPattern
-            = "^" + CustomDelimitersDefinitionBeginning
-                + @"(?<DELIMITERS>\[.+?\])+?"
-                + CustomDelimitersDefinitionEnds
-                + @"(?<NUMBERS>\d.+\d)$";
-
-        private const string CustomSingleDelimiterDefinitionPattern
-            = @"^\[(?<DELIMITER>.+)\]$";
-
         private static void FindCustomDelimiters(
             string baseNumberSequence,
             ref string[] delimiters,
@@ -82,14 +73,29 @@ namespace KataStringCalculator
                 FindCustomSingleDelimiter(baseNumberSequence, out delimiters, out resultNumberSequence);
         }
 
+        private static Match RegexMatch(string input, string pattern)
+        {
+            const RegexOptions regexOptions = RegexOptions.Compiled
+                | RegexOptions.ExplicitCapture
+                | RegexOptions.Singleline;
+
+            return Regex.Match(input, pattern, regexOptions);
+        }
+
         private static bool TryFindCustomComplexDelimiters(
             string baseNumberSequence,
             ref string[] delimiters,
             ref string resultNumberSequence)
         {
-            var customDefinitions = Regex.Match(
+            const string customDelimitersDefinitionPattern
+                = "^" + CustomDelimitersDefinitionBeginning
+                    + @"(?<DELIMITERS>\[.+?\])+?"
+                    + CustomDelimitersDefinitionEnds
+                    + @"(?<NUMBERS>\d.+\d)$";
+
+            var customDefinitions = RegexMatch(
                 baseNumberSequence,
-                CustomDelimitersDefinitionPattern);
+                customDelimitersDefinitionPattern);
 
             if (!customDefinitions.Success)
                 return false;
@@ -102,30 +108,38 @@ namespace KataStringCalculator
                 .Groups["DELIMITERS"]
                 .Captures;
 
-            var customDelimiters = new List<string>();
-            for (int i = 0; i < customDelimiterCaptures.Count; ++i)
-            {
-                var delimiterMatch = Regex.Match(
-                    customDelimiterCaptures[i].Value,
-                    CustomSingleDelimiterDefinitionPattern);
-
-                if (delimiterMatch.Success)
-                {
-                    var delimiter = delimiterMatch
-                        .Groups["DELIMITER"]
-                        .Value;
-
-                    customDelimiters
-                        .Add(delimiter);
-                }
-            }
-
-            customDelimiters.AddRange(DefaultSplitters);
-            delimiters = customDelimiters
-                .OrderByDescending(deli => deli, ContainsStringComparer.Instance)
-                .ToArray();
+            delimiters = GetCustomDelimitersArray(customDelimiterCaptures);
 
             return true;
+        }
+
+        private static string[] GetCustomDelimitersArray(CaptureCollection definitionCaptures)
+        {
+            return GetComplexDelimiters(definitionCaptures)
+                .Concat(DefaultSplitters)
+                .Distinct()
+                .OrderByDescending(deli => deli, ContainsStringComparer.Instance)
+                .ToArray();
+        }
+
+        private static IEnumerable<string> GetComplexDelimiters(CaptureCollection delimiterCaptures)
+        {
+            for (int i = 0; i < delimiterCaptures.Count; ++i)
+            {
+                const string delimiterDefinitionPattern
+                    = @"^\[(?<DELIMITER>.+)\]$";
+
+                var delimiterMatch = RegexMatch(
+                    delimiterCaptures[i].Value,
+                    delimiterDefinitionPattern);
+
+                if (!delimiterMatch.Success)
+                    continue;
+
+                yield return delimiterMatch
+                    .Groups["DELIMITER"]
+                    .Value;
+            }
         }
 
         private static void FindCustomSingleDelimiter(
