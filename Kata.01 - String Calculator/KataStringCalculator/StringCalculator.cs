@@ -12,6 +12,8 @@ namespace KataStringCalculator
             return AddIts(GetNumbers(numbers));
         }
 
+        private const int MaxNumber = 1000;
+
         private static int AddIts(IEnumerable<int> numbers)
         {
             long currentSum = 0;
@@ -21,6 +23,9 @@ namespace KataStringCalculator
             {
                 if (currentNumber < 0)
                     negatives.Add(currentNumber);
+
+                if (currentNumber > MaxNumber)
+                    continue;
 
                 currentSum += currentNumber;
             }

@@ -87,8 +87,7 @@ namespace StringCalculatorTests
             }
         }
 
-        [Fact]
-
+        [Theory]
         [InlineData("2,1001", 2)]
         [InlineData("2,1000", 1002)]
         [InlineData("1,1001,10001,1001,1", 2)]
