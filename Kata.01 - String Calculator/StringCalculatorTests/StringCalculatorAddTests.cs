@@ -72,5 +72,20 @@ namespace StringCalculatorTests
             Assert.Throws<NegativesNotAllowedException>(
                 () => calculator.Add("3,2,1,0,-1"));
         }
+
+        [Fact]
+        public void ShouldThrowMessageWithAllOccuredNegativesNumber()
+        {
+            var calculator = new StringCalculator();
+
+            try
+            {
+                int ignored = calculator.Add("9,-5,1,-7,5,-5,3,-2,1");
+            }
+            catch (NegativesNotAllowedException exception)
+            {
+                Assert.Equal(expected: "Negative numbers are not allowed. Encountered values: -5; -7; -5; -2.", actual: exception.Message);
+            }
+        }
     }
 }
