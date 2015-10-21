@@ -153,5 +153,30 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: 1024, actual: result);
         }
+
+        [Fact]
+        public void ShouldAllowDefinesDelimiterContainsOpeningAndClosingSquareBracket()
+        {
+            var delimiter = new[] { "[", "]", "][", "[]" };
+            // Cleared numbers sequence:                        "1 12 1  161  6 135 248  84 86  16  38  4  96"
+            var numbers = string.Format("//[{0}][{1}][{2}][{3}]\n1]12[1[]161][6]135[248][84[86[]16][38[]4][96", delimiter[0], delimiter[1], delimiter[2], delimiter[3]);
+
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbers);
+
+            Assert.Equal(expected: 888, actual: result);
+        }
+
+        [Fact]
+        public void ShouldAllowDefinesDelimitersAnyComplex()
+        {
+            // Cleared numbers sequence:                                                     "1                                13                                7                                42 1 5  5                                123                           5 15  5"
+            var numbers = "//[_contains,base\ndelimiters_][__hard[core4]de2]li2]mi2]ter3]__]\n1__hard[core4]de2]li2]mi2]ter3]__13__hard[core4]de2]li2]mi2]ter3]__7__hard[core4]de2]li2]mi2]ter3]__42,1,5\n5__hard[core4]de2]li2]mi2]ter3]__123_contains,base\ndelimiters_5,15\n5";
+
+            var calculator = new StringCalculator();
+            int result = calculator.Add(numbers);
+
+            Assert.Equal(expected: 222, actual: result);
+        }
     }
 }
