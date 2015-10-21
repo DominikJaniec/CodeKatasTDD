@@ -99,5 +99,14 @@ namespace StringCalculatorTests
 
             Assert.Equal(expected: expectedResult, actual: result);
         }
+
+        [Fact]
+        public void ShouldAllowDelimeterToBeDefinedInAnyLength()
+        {
+            var calculator = new StringCalculator();
+            int result = calculator.Add("//[***]\n1***2***3");
+
+            Assert.Equal(expected: 3, actual: result);
+        }
     }
 }
