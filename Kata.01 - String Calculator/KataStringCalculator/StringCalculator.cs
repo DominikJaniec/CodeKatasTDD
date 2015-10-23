@@ -1,108 +1,190 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace KataStringCalculator
 {
     public class StringCalculator
     {
-        private const string DelimiterDeclarationBegin = "//";
-        private const string DelimiterDeclarationEnd = "\n";
-        private const string LongDelimiterDefinitionBegin = "[";
-        private const string LongDelimiterDefinitionEnd = "]";
-
-        private const string MultipleDelimiterSplitTag
-            = LongDelimiterDefinitionEnd + LongDelimiterDefinitionBegin;
-
-        private readonly char[] Splitters = new[] { ',', '\n' };
-
         public int Add(string numbers)
         {
-            IEnumerable<int> allNumbers = SplitNumbers(numbers)
-                .Select(numStr => ParseNumber(numStr));
-
-            CheckNegativeNumbers(allNumbers);
-
-            return allNumbers
-                .Where(IsValidNumber)
-                .Sum();
+            return AddIts(GetNumbers(numbers));
         }
 
-        private void CheckNegativeNumbers(IEnumerable<int> numbers)
+        private static int AddIts(IEnumerable<int> numbers)
         {
-            IEnumerable<int> allNegativeNumbers = numbers
-                .Where(n => n < 0);
+            long currentSum = 0;
+            var negatives = new List<int>();
 
-            if (allNegativeNumbers.Any())
+            foreach (var currentNumber in numbers)
             {
-                throw new NegativesNotAllowed(allNegativeNumbers);
+                if (currentNumber < 0)
+                    negatives.Add(currentNumber);
+
+                if (currentNumber > MaxNumber)
+                    continue;
+
+                currentSum += currentNumber;
+            }
+
+            if (negatives.Any())
+                throw new NegativesNotAllowedException(negatives);
+
+            return (int)currentSum;
+        }
+
+        private static IEnumerable<int> GetNumbers(string numbers)
+        {
+            return GetNumbersAsStrings(numbers)
+                .Select(Int32.Parse);
+        }
+
+        private static IEnumerable<string> GetNumbersAsStrings(string numbers)
+        {
+            var resultNumberSequence = numbers;
+            var delimiterStringArray = DefaultSplitters;
+
+            FindCustomDelimiters(
+                numbers,
+                ref delimiterStringArray,
+                ref resultNumberSequence);
+
+            return resultNumberSequence.Split(
+                delimiterStringArray,
+                StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private const int MaxNumber = 1000;
+        private static readonly string[] DefaultSplitters = { ",", "\n" };
+
+        private const string CustomDelimitersDefinitionBeginning = "//";
+        private const string CustomDelimitersDefinitionEnds = "\n";
+
+        private static void FindCustomDelimiters(
+            string baseNumberSequence,
+            ref string[] delimiters,
+            ref string resultNumberSequence)
+        {
+            if (!baseNumberSequence.StartsWith(CustomDelimitersDefinitionBeginning))
+                return;
+
+            if (!TryFindCustomComplexDelimiters(baseNumberSequence, ref delimiters, ref resultNumberSequence))
+                FindCustomSingleDelimiter(baseNumberSequence, out delimiters, out resultNumberSequence);
+        }
+
+        private static Match RegexMatch(string input, string pattern)
+        {
+            const RegexOptions regexOptions = RegexOptions.Compiled
+                | RegexOptions.ExplicitCapture
+                | RegexOptions.Singleline;
+
+            return Regex.Match(input, pattern, regexOptions);
+        }
+
+        private static bool TryFindCustomComplexDelimiters(
+            string baseNumberSequence,
+            ref string[] delimiters,
+            ref string resultNumberSequence)
+        {
+            const string customDelimitersDefinitionPattern
+                = "^" + CustomDelimitersDefinitionBeginning
+                    + @"(?<DELIMITERS>\[.+?\])+?"
+                    + CustomDelimitersDefinitionEnds
+                    + @"(?<NUMBERS>\d.+\d)$";
+
+            var customDefinitions = RegexMatch(
+                baseNumberSequence,
+                customDelimitersDefinitionPattern);
+
+            if (!customDefinitions.Success)
+                return false;
+
+            resultNumberSequence = customDefinitions
+                .Groups["NUMBERS"]
+                .Value;
+
+            var customDelimiterCaptures = customDefinitions
+                .Groups["DELIMITERS"]
+                .Captures;
+
+            delimiters = GetCustomDelimitersArray(customDelimiterCaptures);
+
+            return true;
+        }
+
+        private static string[] GetCustomDelimitersArray(CaptureCollection definitionCaptures)
+        {
+            return GetComplexDelimiters(definitionCaptures)
+                .Concat(DefaultSplitters)
+                .Distinct()
+                .OrderByDescending(deli => deli, ContainsStringComparer.Instance)
+                .ToArray();
+        }
+
+        private static IEnumerable<string> GetComplexDelimiters(CaptureCollection delimiterCaptures)
+        {
+            for (int i = 0; i < delimiterCaptures.Count; ++i)
+            {
+                const string delimiterDefinitionPattern
+                    = @"^\[(?<DELIMITER>.+)\]$";
+
+                var delimiterMatch = RegexMatch(
+                    delimiterCaptures[i].Value,
+                    delimiterDefinitionPattern);
+
+                if (!delimiterMatch.Success)
+                    continue;
+
+                yield return delimiterMatch
+                    .Groups["DELIMITER"]
+                    .Value;
             }
         }
 
-        private string[] ExtractDelimiter(string delimiterDefinition)
+        private static void FindCustomSingleDelimiter(
+            string baseNumberSequence,
+            out string[] delimiters,
+            out string resultNumberSequence)
         {
-            if (delimiterDefinition.Length == 1)
+            var legalSingleCharDelimiterIndex = CustomDelimitersDefinitionBeginning.Length;
+            var customSingleCharDelimiter = baseNumberSequence
+                .Substring(legalSingleCharDelimiterIndex, length: 1);
+
+            delimiters = new[] { customSingleCharDelimiter }
+                .Concat(DefaultSplitters)
+                .ToArray();
+
+            var resultSequenceStartIndex = 1
+                + CustomDelimitersDefinitionBeginning.Length
+                + CustomDelimitersDefinitionEnds.Length;
+
+            resultNumberSequence = baseNumberSequence
+                .Substring(resultSequenceStartIndex);
+        }
+
+        private class ContainsStringComparer : IComparer<string>
+        {
+            public static IComparer<string> Instance { get; private set; }
+
+            static ContainsStringComparer()
             {
-                return new string[] { delimiterDefinition };
+                Instance = new ContainsStringComparer();
             }
 
-            if (IsValidLongDelimiterDefinition(delimiterDefinition))
+            public int Compare(string x, string y)
             {
-                int substringIndexBegin = LongDelimiterDefinitionBegin.Length;
-                int delimiterLength = delimiterDefinition.Length - substringIndexBegin - LongDelimiterDefinitionEnd.Length;
+                if (string.Equals(x, y))
+                    return 0;
 
-                return delimiterDefinition
-                    .Substring(substringIndexBegin, delimiterLength)
-                    .Split(new string[] { MultipleDelimiterSplitTag }, StringSplitOptions.RemoveEmptyEntries);
+                if (x.Contains(y))
+                    return 1;
+
+                if (y.Contains(x))
+                    return -1;
+
+                return 0;
             }
-            else
-            {
-                throw new FormatException("Invalid definition of delimiter.");
-            }
-        }
-
-        private bool IsDelimiterDefined(string data)
-        {
-            return data.StartsWith(DelimiterDeclarationBegin);
-        }
-
-        private bool IsValidLongDelimiterDefinition(string delimiterDefinition)
-        {
-            return delimiterDefinition.StartsWith(LongDelimiterDefinitionBegin)
-                && delimiterDefinition.EndsWith(LongDelimiterDefinitionEnd);
-        }
-
-        private bool IsValidNumber(int number)
-        {
-            return number < 1000;
-        }
-
-        private int ParseNumber(string number)
-        {
-            int parsedValue = 0;
-            Int32.TryParse(number, out parsedValue);
-
-            return parsedValue;
-        }
-
-        private string[] SplitNumbers(string numbers)
-        {
-            return IsDelimiterDefined(numbers)
-                ? SplitNumbersByDefinedDelimiter(numbers)
-                : numbers.Split(Splitters, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        private string[] SplitNumbersByDefinedDelimiter(string data)
-        {
-            int substringIndexBegin = DelimiterDeclarationBegin.Length;
-            int substringIndexEnd = data.IndexOf(DelimiterDeclarationEnd);
-            int delimiterDefinitionLength = substringIndexEnd - substringIndexBegin;
-
-            string delimiterDefinition = data.Substring(substringIndexBegin, delimiterDefinitionLength);
-            string[] delimiters = ExtractDelimiter(delimiterDefinition);
-            string numbers = data.Substring(substringIndexEnd + 1);
-
-            return numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
