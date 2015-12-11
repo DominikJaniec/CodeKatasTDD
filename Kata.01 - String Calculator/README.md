@@ -61,7 +61,7 @@ This time I was working on this Kata in three time spans:
        * I stopped on defining custom delimiters, because I understood that delimiter can by any length, not only single char - so I didn't keep [**YAGNI**](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it) principle in my mind, so I used Regex for that purpose... ([*I know, I'll use regular expressions.* Now you have two problems](http://programmers.stackexchange.com/questions/223634/what-is-meant-by-now-you-have-two-problems))
   2. From 2015-10-21 10:41:31 +0200: [[`490906e`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/490906e418171f40a1b116aff72be912de07dd7e) to about 3 hours later: [[`4953110`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/495311030bc33571c2c7f7bcfa4e250bd46b1b8b)
        * Everything was going OK, until Regex strike back again ;)
-       * A first problematic change comes from fact, that when delimiter has been defined, and it is longer then single char, then also it should has been wrapped with: `[`, `]` symbols. That step took about 30 minutes of work: [[`c828dd`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/c828dda96dd2919bdf9c59595f9c8988596bc971).
+       * A first problematic change comes from fact, that when delimiter has been defined, and it is longer then single char, then also it should has been wrapped with: `[`, `]` symbols. That step took about 30 minutes of work: [[`854b4ee`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/854b4ee164434a45171fa0da1d49619caa6e7d84).
        * Before my last commit (which looks like about 2h work, but an circa 40 minutes was my lunch break) I was changing Regex to handle definition of multiple delimiters and again, I'm not sure that with different approach I could done it more clean, fast or correct.
   3. From 2015-10-21 17:09:26 +0200: [[`1eabb87`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/1eabb87e576eb814c0fb5be5ce02f16a12ee1a23) to about 2 hours later: [[`81baf50`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/81baf50bbef3c0262defca3f12489415baf98c30)
        * Works here was rather small bug fixing, or clean-up with an one hour break in middle.
@@ -69,6 +69,7 @@ This time I was working on this Kata in three time spans:
 
 Total time taken: nearly **5 hours** over *two days*... Something went wrong, didn't it? I'm not sure what was the true cause, maybe Regex, maybe myself, maybe too frequented committing to git.
 
-But I'm going to make this one Kata one more time in one, continuous activity and then I could say that I can or can't make this one Kata in about 30 minutes.
+But I had done this Kata one more time, in one, continuous activity. The first five steps I made in about 38 minutes and stop, like 6th point claims: _"(...) Continue if you can finish the steps so far in less than 30 minutes"_. Here it is: [**`Kata01_StringCalculator_oneTrial`**](https://github.com/DominikJaniec/CodeKatasTDD/tree/Kata01_StringCalculator_oneTrial).
 
-Last time, when I was writing in this README, I wrote that I will make this Kata using [nx]Unit's library instead Asserts provided by Visual Studio. So I have done it with xUnit. Actually I don't see any huge differences, but probably third party Asserts library is better than strict binds to Visual Studio.
+
+Last time [[`000249b`]](https://github.com/DominikJaniec/CodeKatasTDD/commit/000249b66339046fb718f3a3979c2aaa64de6497), when I was writing in this README, I wrote that I will make this Kata using [nx]Unit's library instead Asserts provided by Visual Studio. So I have done it with xUnit. Actually I don't see any huge differences, but probably third party Asserts library is better than strict binds to Visual Studio.
