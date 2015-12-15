@@ -18,5 +18,12 @@ namespace RomanNumeralsTests
             var romanNumber = Romaner.ToRoman(2);
             Assert.Equal("II", romanNumber);
         }
+
+        [Fact]
+        public void Three_ShouldBe_III()
+        {
+            var romanNumber = Romaner.ToRoman(3);
+            Assert.Equal("III", romanNumber);
+        }
     }
 }
