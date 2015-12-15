@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace KataRomanNumerals
+﻿namespace KataRomanNumerals
 {
     public static class Romaner
     {
         public static string ToRoman(int value)
         {
-            throw new NotImplementedException();
+            return "I";
         }
     }
 }
