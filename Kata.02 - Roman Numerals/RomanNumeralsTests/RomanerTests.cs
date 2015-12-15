@@ -25,5 +25,12 @@ namespace RomanNumeralsTests
             var romanNumber = Romaner.ToRoman(3);
             Assert.Equal("III", romanNumber);
         }
+
+        [Fact]
+        public void Four_ShouldBe_IV()
+        {
+            var romanNumber = Romaner.ToRoman(4);
+            Assert.Equal("IV", romanNumber);
+        }
     }
 }
