@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace KataRomanNumerals
 {
@@ -8,58 +8,86 @@ namespace KataRomanNumerals
     {
         public static string ToRoman(int value)
         {
-            var romanResult = new StringBuilder();
+            var arabicKeys = GetKeySequence(value);
+            var correctKeys = ApplyRepetitionLimit(arabicKeys);
+            var romanNumbers = TranslateToRoman(correctKeys);
 
-            var currentValue = value;
+            return string.Join(string.Empty, romanNumbers);
+        }
+
+        private static IEnumerable<int> GetKeySequence(int arabicValue)
+        {
+            var currentValue = arabicValue;
             while (currentValue > 0)
             {
-                var key = FindArabicKey(currentValue);
-                if (key.HasValue == false)
-                    break;
+                var currentKey = _arabicToRomanMap.Keys
+                    .OrderByDescending(key => key)
+                    .First(key => key <= currentValue);
 
-                var arabicKey = key.GetValueOrDefault();
-                var romanNumber = _arabicToRomanMap[arabicKey];
-                romanResult.Append(romanNumber);
+                yield return currentKey;
+                currentValue -= currentKey;
+            }
+        }
 
-                currentValue -= arabicKey;
+        private static IEnumerable<int> ApplyRepetitionLimit(IEnumerable<int> keys)
+        {
+            var lastKey = Int32.MinValue;
+            var sameKeyBuffor = new List<int>();
+
+            foreach (var currentKey in keys)
+            {
+                if (currentKey != lastKey)
+                {
+                    foreach (var key in sameKeyBuffor)
+                    {
+                        yield return key;
+                    }
+
+                    lastKey = currentKey;
+                    sameKeyBuffor = new List<int>();
+                }
+
+                sameKeyBuffor.Add(currentKey);
+
+                if (sameKeyBuffor.Count == 4)
+                {
+                    var biggerKey = _arabicToRomanMap.Keys
+                        .OrderBy(key => key)
+                        .Cast<int?>()
+                        .FirstOrDefault(key => key > currentKey);
+
+                    if (biggerKey.HasValue)
+                    {
+                        sameKeyBuffor = new List<int>();
+
+                        yield return currentKey;
+                        yield return biggerKey.Value;
+                    }
+                }
             }
 
-            return romanResult.ToString();
+            foreach (var key in sameKeyBuffor)
+            {
+                yield return key;
+            }
         }
 
-        private static int? FindArabicKey(int currentValue)
+        private static IEnumerable<string> TranslateToRoman(IEnumerable<int> arabicKeys)
         {
-            return _availableArabicKeysDesc
-                .FirstOrDefault(key => key <= currentValue);
+            return arabicKeys
+                .Select(key => _arabicToRomanMap[key]);
         }
 
-        private static readonly IReadOnlyDictionary<int, string> _arabicToRomanMap;
-        private static readonly IReadOnlyList<int?> _availableArabicKeysDesc;
-
-        static Romaner()
-        {
-            _arabicToRomanMap = new Dictionary<int, string>
+        private static readonly IReadOnlyDictionary<int, string> _arabicToRomanMap
+            = new Dictionary<int, string>
             {
                 { 1, "I" },
-                { 4, "IV" },
                 { 5, "V" },
-                { 9, "IX" },
                 { 10, "X" },
-                { 40, "XL" },
                 { 50, "L" },
-                { 90, "XC" },
                 { 100, "C" },
-                { 400, "CD" },
                 { 500, "D" },
-                { 900, "CM" },
                 { 1000, "M" },
             };
-
-            _availableArabicKeysDesc = _arabicToRomanMap.Keys
-                .Cast<int?>()
-                .OrderByDescending(key => key)
-                .ToList()
-                .AsReadOnly();
-        }
     }
 }
