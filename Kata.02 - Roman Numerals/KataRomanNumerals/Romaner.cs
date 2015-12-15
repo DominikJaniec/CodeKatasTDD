@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace KataRomanNumerals
 {
@@ -6,18 +8,48 @@ namespace KataRomanNumerals
     {
         public static string ToRoman(int value)
         {
-            if (value > RepeationLimit)
-                return Repeat(RomanSingle, times: value - RepeationLimit) + "V";
+            var romanResult = new StringBuilder();
 
-            return Repeat(RomanSingle, times: value);
+            var currentValue = value;
+            while (currentValue > 0)
+            {
+                var key = FindArabicKey(currentValue);
+                if (key.HasValue == false)
+                    break;
+
+                var arabicKey = key.GetValueOrDefault();
+                var romanNumber = _arabicToRomanMap[arabicKey];
+                romanResult.Append(romanNumber);
+
+                currentValue -= arabicKey;
+            }
+
+            return romanResult.ToString();
         }
 
-        private const int RepeationLimit = 3;
-        private const char RomanSingle = 'I';
-
-        private static string Repeat(char character, int times)
+        private static int? FindArabicKey(int currentValue)
         {
-            return new String(character, times);
+            return _availableArabicKeysDesc
+                .FirstOrDefault(key => key <= currentValue);
+        }
+
+        private static readonly IReadOnlyDictionary<int, string> _arabicToRomanMap;
+        private static readonly IReadOnlyList<int?> _availableArabicKeysDesc;
+
+        static Romaner()
+        {
+            _arabicToRomanMap = new Dictionary<int, string>
+            {
+                { 1, "I" },
+                { 4, "IV" },
+                { 5, "V" }
+            };
+
+            _availableArabicKeysDesc = _arabicToRomanMap.Keys
+                .Cast<int?>()
+                .OrderByDescending(key => key)
+                .ToList()
+                .AsReadOnly();
         }
     }
 }
