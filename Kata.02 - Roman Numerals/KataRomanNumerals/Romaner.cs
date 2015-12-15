@@ -6,10 +6,14 @@ namespace KataRomanNumerals
     {
         public static string ToRoman(int value)
         {
-            return Repeat(RomanUnity, times: value);
+            if (value > RepeationLimit)
+                return Repeat(RomanSingle, times: value - RepeationLimit) + "V";
+
+            return Repeat(RomanSingle, times: value);
         }
 
-        private const char RomanUnity = 'I';
+        private const int RepeationLimit = 3;
+        private const char RomanSingle = 'I';
 
         private static string Repeat(char character, int times)
         {
